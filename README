@@ -1,0 +1,51 @@
+# **Implementation of STS unique emergency system in Romania**
+314CA Stefan Alexandru Vladut
+
+
+## Introduction and Structure
+The system is organised in 4 crucial parts: *dll_stack_init*, *utils*, *operations* and *main*. Each of these plays an important rule in maintaining the functionality and smooth-operation of it. Main as the name says its the central
+part, the kernel of the system where the commands are interpreted and diverted to the their assigned function. I would also like too add that this system is well-built in order to avoid data leakage or interruption which can cause significant damage as people lives are in his "hands".
+
+As you may see, the project is organized in multiple .c files and headers(.h) to make it well structured and easy to follow. Each header contains structure declarations and function calls that are going to be used in the corresponding .c file. I want to make that declarations in advance where possible to avoid circular dependencies. In addition to this, you may see that operations are located in a specific .c file in order to be centralised and easy to be accesed even for anyone seeing the code for the first time.
+
+Notwithstanding the importance of headers I also used in .c files some useful functions from the laboratory of SDA course in order to help me save lines(DIE and MIN). DIE is used not only for design choices to have an interactive interface, but also to prevent memory leaks which can be crucial.
+
+## P.S:
+Several functions return pointers to dinamically allocated structures in order to maintain them valid and useable by transferring the information
+If a command is invalid or doesn't respect the specific format the error message "INVALID OPERATION! ERROR 404" is displayed
+
+`1. dll_stack_init.c/.h`
+-   Declarations and definition of essential functions from laboratory for:
+ -        doubly linked list
+ -        stack
+ -        queue
+-   Stack is used for interventions history in order to review past actions
+-   Queue is used in order to divide incidents by their priority level
+-   DLL is the cornerstone of the system implementation, ensuring flexibility between data and making it possible to store it in a form that suits our needs
+
+`2. utils.c/.h`
+-   Defining and initializing sentinel nodes for incidents and interventions
+-   Have free functions for dll and stack in order to avoid memory leaks and make things look clean and safe
+
+`3. declarations.h`
+-   As you may guess here are defined and declared the structures that are used in our system
+-   In addition to this, I've used 2 Macros from laboratory which are useful for streamlining the code
+
+`4. operations.c/.h`
+-   Defining and building the 8 available operations in the system   
+-       add_incident
+-       check_units_availability
+-       disptch
+-       undo_last_dispatch
+-       solved_incident
+-       show_unit
+-       show_incident
+-       show_interventions
+-   initialization of the system, loading the current system with first incidents and using *dispatch* function units are assigned an incident to solve
+-   to be of help I kept the calls history into a stack, where the *undo_last_dispatch* function enter the game which will *undo* the most recent intervened intervention, as a switch of plans from the command center. 
+
+`5. main.c`
+-   Main function is undoubtedly the brain of the system and the place where all actions take place
+-   Here each command is interpreted and depending on the chosen operation, the assigned function is called.
+-   Furthermore, at the end of the programm you can see the free functions for each structure used and also I closed the in and out files to prevent data leakage.
+-   Finally, main ensures the correct management of operations and the handling of invalid ones, but also serves as the basis of this setup
